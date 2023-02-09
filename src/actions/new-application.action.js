@@ -1,5 +1,6 @@
 const path = require('path');
-const { gitClone } = require('../../lib/git');
+const { print } = require('../../lib/print');
+const { gitClone, gitInit } = require('../../lib/git');
 const {
   isDirectoryExists,
   removeDirectory,
@@ -9,13 +10,18 @@ const {
 const { updatePackageJson } = require('../../lib/package');
 
 module.exports = async function newApplicationAction(dir) {
-  const directoryExists = await isDirectoryExists(path.resolve(dir));
+  const dirPath = path.resolve(dir);
+
+  print(`Checking directory...`);
+  const directoryExists = await isDirectoryExists(dirPath);
 
   if (directoryExists) throw new Error('directory already exists');
 
+  print(`Cloning project...`);
   await gitClone(`https://github.com/ibrahimalanshor/gwik-app`, dir);
   await removeDirectory(path.resolve(dir, '.git'));
 
+  print('Setting up project...');
   const packageJson = updatePackageJson(
     await readFile(path.resolve(dir, 'package.json')),
     {
@@ -32,4 +38,10 @@ module.exports = async function newApplicationAction(dir) {
   );
 
   await writeFile(path.resolve(dir, 'package.json'), packageJson);
+  await gitInit(dirPath);
+
+  print('Done. Now Run:');
+  print(`cd ${dir}`);
+  print('npm install');
+  print('npm run dev');
 };
