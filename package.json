@@ -1,6 +1,9 @@
 {
   "name": "gwik-cli",
   "version": "1.0.0",
+  "bin": {
+    "gwik": "./bin/app.js"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
