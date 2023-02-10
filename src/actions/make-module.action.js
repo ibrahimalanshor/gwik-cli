@@ -1,6 +1,6 @@
 const {
   makeDirectory,
-  isDirectoryExists,
+  isPathExists,
   removeDirectory,
   writeFile,
   readFile,
@@ -16,12 +16,16 @@ module.exports = async function makeModule(name) {
   const routesPath = path.resolve('src', 'routes.js');
 
   print('Checking directory...');
-  if (await isDirectoryExists(dirPath)) {
+  if (await isPathExists(dirPath)) {
     throw new Error(`module ${moduleName} already exists`);
   }
 
   print('Creating module...');
   await makeDirectory(path.resolve('src', 'modules', moduleName));
+
+  if (!(await isPathExists(routesPath))) {
+    await writeFile(routesPath, '');
+  }
 
   await Promise.all([
     writeFile(
@@ -32,6 +36,6 @@ module.exports = async function makeModule(name) {
       path.resolve(dirPath, `${moduleName}.routes.js`),
       generateRouter(moduleName)
     ),
-    // writeFile(path.resolve(routesPath), updateRoutes(await readFile(routesPath), moduleName))
+    writeFile(routesPath, updateRoutes(await readFile(routesPath), moduleName)),
   ]);
 };

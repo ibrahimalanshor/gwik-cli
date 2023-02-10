@@ -1,53 +1,25 @@
 module.exports = function updateRoutes(existsingRoutes, moduleDir) {
-  const routes = existsingRoutes;
   const template = `...require('./modules/${moduleDir}/${moduleDir}.routes'),`;
 
-  if (!routes.trim().length) {
+  if (!existsingRoutes.trim().length) {
     return 'module.exports = [\n\t' + template + '\n]';
   }
 
-  const closeBrackendEnd = routes.lastIndexOf(']');
-  const firstRouteIndex = routes.indexOf('[') + 1;
-  const lastRouteIndex = closeBrackendEnd - 1;
-  const firstRouteStartChar = routes.charAt(firstRouteIndex);
-  const lastRouteStartChar = routes.charAt(lastRouteIndex);
-  const newLineBeforeFirstRoute = firstRouteStartChar === '\n';
-  const newLineBeforeLastRoute = lastRouteStartChar === '\n';
-
-  console.log(
-    firstRouteStartChar === '\t',
-    newLineBeforeFirstRoute,
-    newLineBeforeLastRoute
+  const openBracketIndex = existsingRoutes.indexOf('[');
+  const closeBrackendIndex = existsingRoutes.lastIndexOf(']');
+  const lastCommaIndex = existsingRoutes.lastIndexOf(',');
+  const routes = existsingRoutes.slice(
+    openBracketIndex,
+    closeBrackendIndex + 1
   );
-  // const lastRouteEndChar = routes.charAt(squareBracketCloseIndex - 1)
-  // const lastRouteEndCharHasNewLine = lastRouteEndChar === '\n'
-  // const lastRouteEndCharHasComma = lastRouteEndChar - 1 === ','
-  // const firstRouteStartCharHasNewLine = firstRouteStartChar === '\n'
+  const endIndex = lastCommaIndex !== -1 ? lastCommaIndex : closeBrackendIndex;
+  const emptyRoutes = !new RegExp('[wd]', 'gmi').test(routes.trim());
 
-  // // return routes.slice(0, firstRouteStartChar)
-  // //   + (firstRouteStartCharHasNewLine ? '\n\t' : '')
-  // //   + routes.slice(firstRouteStartChar + 1, squareBracketCloseIndex)
-  // //   + (!lastRouteEndCharHasComma ? ',' : '')
-  // //   + (lastRouteEndCharHasNewLine ? '\t' : '\n\t')
-  // //   + template + '\n]'
-
-  // console.log(lastRouteEndChar, lastRouteEndCharHasComma, lastRouteEndCharHasNewLine)
-
-  // console.log(routes.slice(0, squareBracketOpenIndex + 1)
-  // + (!firstRouteStartCharHasNewLine ? '\n\t' : '')
-  // + routes.slice(squareBracketOpenIndex + 1, squareBracketCloseIndex - 1)
-  // + (lastRouteEndCharHasNewLine
-  //   ? (!lastRouteEndCharHasComma ? ',\t' : '\t') : '\n\t')
-  // + '\n\t'
-  // + template + '\n]')
-
-  console.log(
-    routes.slice(0, firstRouteIndex) +
-      routes.slice(firstRouteIndex, closeBrackendEnd) +
-      '\t' +
-      template +
-      '\n]'
+  return (
+    existsingRoutes.slice(0, endIndex) +
+    (!emptyRoutes ? ',' : '') +
+    '\n\t' +
+    template +
+    '\n]'
   );
-
-  return existsingRoutes;
 };
