@@ -12,6 +12,7 @@ const { updateRoutes } = require('../common');
 
 module.exports = async function makeModule(name) {
   const moduleName = name.toLowerCase();
+  const normalModuleName = moduleName.replace('-', ' ');
   const dirPath = path.resolve('src', 'modules', moduleName);
   const routesPath = path.resolve('src', 'routes.js');
 
@@ -30,11 +31,11 @@ module.exports = async function makeModule(name) {
   await Promise.all([
     writeFile(
       path.resolve(dirPath, `${moduleName}.controller.js`),
-      generateController(moduleName)
+      generateController(normalModuleName)
     ),
     writeFile(
       path.resolve(dirPath, `${moduleName}.routes.js`),
-      generateRouter(moduleName)
+      generateRouter(moduleName, normalModuleName)
     ),
     writeFile(routesPath, updateRoutes(await readFile(routesPath), moduleName)),
   ]);

@@ -13,7 +13,7 @@ module.exports = function updateRoutes(existsingRoutes, moduleDir) {
     closeBrackendIndex + 1
   );
   const endIndex = lastCommaIndex !== -1 ? lastCommaIndex : closeBrackendIndex;
-  const emptyRoutes = !new RegExp('[wd]', 'gmi').test(routes.trim());
+  const emptyRoutes = !/[\w\d]/gim.test(routes.trim());
 
   return (
     existsingRoutes.slice(0, endIndex) +
