@@ -7,7 +7,7 @@ module.exports = function generateController(name) {
 };`;
 
   const data = {
-    '{function}': toCase.toCamelCase('get', pluralize(name)),
+    '{function}': toCase.toCamelCase('get', ...pluralize(name).split(' ')),
     '{return}': `[]`,
   };
 
