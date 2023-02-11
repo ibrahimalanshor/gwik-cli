@@ -2,7 +2,7 @@ const path = require('path');
 const { print } = require('../../lib/print');
 const { gitClone, gitInit } = require('../../lib/git');
 const {
-  isDirectoryExists,
+  isPathExists,
   removeDirectory,
   readFile,
   writeFile,
@@ -13,7 +13,7 @@ module.exports = async function newApplicationAction(dir) {
   const dirPath = path.resolve(dir);
 
   print(`Checking directory...`);
-  const directoryExists = await isDirectoryExists(dirPath);
+  const directoryExists = await isPathExists(dirPath);
 
   if (directoryExists) throw new Error('directory already exists');
 
