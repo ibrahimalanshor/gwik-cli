@@ -38,4 +38,6 @@ module.exports = async function makeModule(name) {
     ),
     writeFile(routesPath, updateRoutes(await readFile(routesPath), moduleName)),
   ]);
+
+  print('Done');
 };
