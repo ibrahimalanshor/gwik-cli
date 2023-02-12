@@ -6,16 +6,10 @@ const {
   readFile,
 } = require('../../lib/fs');
 const { toCase } = require('../../lib/string');
+const { isInclude } = require('../../lib/array');
 const { generateRequest } = require('../templates');
 const { updateExports } = require('../common');
 const path = require('path');
-
-async function validateType(type) {
-  const availableTypes = ['body', 'multipart'];
-
-  if (!availableTypes.includes(type))
-    throw new Error(`type ${type} is not available`);
-}
 
 module.exports = async function makeRequestAction(name, options) {
   const { type } = options;
@@ -27,7 +21,8 @@ module.exports = async function makeRequestAction(name, options) {
   const exportsPath = path.resolve(requestDirPath, 'index.js');
   const requestExport = toCase.toCamelCase(...request.split('-'));
 
-  validateType(type);
+  if (!isInclude(['body', 'multipart'], type))
+    throw new Error(`type ${type} is invalid`);
 
   print('Checking module...');
   if (!(await isPathExists(modulePath))) {
