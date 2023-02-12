@@ -20,6 +20,12 @@ New Module
 gwik make:module user
 ```
 
+New CRUD Module
+
+```bash
+gwik make:module user --type=crud
+```
+
 New Request Body Validation
 
 ```bash
