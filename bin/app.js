@@ -5,6 +5,7 @@ const {
   newApplicationAction,
   makeModuleAction,
   makeRequestAction,
+  makeMiddlewareAction,
 } = require('../src/actions');
 
 program
@@ -26,5 +27,11 @@ program
   .requiredOption('-m, --module <name>', 'Module Name')
   .option('-t, --type <type>', 'Request Type', 'body')
   .action(makeRequestAction);
+
+program
+  .command('make:middleware')
+  .description('New Middleware')
+  .argument('<name>', 'Middleware Name')
+  .action(makeMiddlewareAction);
 
 program.parse();
