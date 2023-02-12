@@ -18,6 +18,7 @@ program
   .command('make:module')
   .description('New Module')
   .argument('<name>', 'Module Name')
+  .option('-t, --type <type>', 'Module Type', 'base')
   .action(makeModuleAction);
 
 program
