@@ -1,10 +1,12 @@
 module.exports = function generateRequest(type) {
   const templates = {
-    body: `const { body } = require('gwik');
+    body: `const { createBodyValidationMiddleware, body } = require('gwik');
+const confirmed = require('../../../common/validator/confirmed.validator');
 
-module.exports = [
-    body('name').exists()
-];`,
+module.exports = createBodyValidationMiddleware([
+  body('name').exists(),
+  body('password').exists().custom(confirmed('password_confirmation')),
+]);`,
     multipart: `const uploadMiddleware = require('../../../common/middlewares/upload.middleware');
 
 module.exports = uploadMiddleware({
